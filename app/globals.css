@@ -374,3 +374,54 @@ label {
     width: 100%;
   }
 }
+
+/* Delete page styles */
+.delete-container,
+.delete-panel {
+  max-width: 700px;
+  margin: 36px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fff6f6;
+  border: 1px solid #ffd6d6;
+}
+
+.delete-container h1,
+.delete-panel h2 {
+  color: #8b1c1c;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.delete-note {
+  max-width: 700px;
+  margin: 12px auto;
+  padding: 10px 14px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+  border-radius: 6px;
+}
+
+.inventory-form-button.delete {
+  background-color: #dc3545;
+  border-color: transparent;
+}
+
+.inventory-form-button.delete:hover {
+  background-color: #b02a37;
+}
+
+/* Ensure submitted-data inside delete looks clear */
+.submitted-data {
+  background: #fff4f4;
+  border-color: #ffd6d6;
+}
+
+@media (max-width: 520px) {
+  .delete-container,
+  .delete-panel {
+    padding: 16px;
+    margin: 20px 12px;
+  }
+}

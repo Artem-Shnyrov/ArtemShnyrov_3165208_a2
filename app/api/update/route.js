@@ -36,9 +36,15 @@ export async function PUT(req){
             )
         }
 
+        const sanitize = (str) => str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        const cleanType = sanitize(applianceType);
+        const cleanBrand = sanitize(brand.trim());
+        const cleanModel = sanitize(modelNumber.trim());
+
         const [result] = await db.query(
             'UPDATE Appliance SET ApplianceType = ?, Brand = ?, ModelNumber = ?, PurchaseDate = ?, WarrantyExpirationDate = ?, CostOfAppliance = ? WHERE SerialNumber = ?',
-            [applianceType, brand, modelNumber.trim(), purchaseDate, warrantyExpirationDate, costOfAppliance, serialNumber.trim()]
+            [cleanType, cleanBrand, cleanModel.trim(), purchaseDate, warrantyExpirationDate, costOfAppliance, serialNumber.trim()]
         )
 
         return new Response(
