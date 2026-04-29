@@ -3,8 +3,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 export default function Inventory() {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [address, setAddress] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [email, setEmail] = useState('');
     const [eircode, setEircode] = useState('');
     const [applianceType, setApplianceType] = useState('');
+    const [costOfAppliance, setCostOfAppliance] = useState('');
     const [brand, setBrand] = useState('');
     const [modelNumber, setModelNumber] = useState('');
     const [serialNumber, setSerialNumber] = useState('');
@@ -15,6 +21,29 @@ export default function Inventory() {
     const [submittedData, setSubmittedData] = useState(null);
 
     const validateForm = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const mobileRegex = /^\d{10,15}$/;
+
+        if (!firstName.trim()) {
+            setErrors('First name is required.');
+            return false;
+        }
+        if (!lastName.trim()) {
+            setErrors('Last name is required.');
+            return false;
+        }
+        if (!address.trim()) {
+            setErrors('Address is required.');
+            return false;
+        }
+        if (!mobileRegex.test(mobile)) {
+            setErrors('Invalid mobile number. Please enter a valid mobile number (10-15 digits).');
+            return false;
+        }
+        if (!emailRegex.test(email)) {
+            setErrors('Invalid email address. Please enter a valid email address.');
+            return false;
+        }
         if (!/^D\d{2}\s\d{4}$/.test(eircode)){
             setErrors('Invalid Eircode format. Please enter a valid Eircode (e.g., D01 1234).');
             return false;
@@ -39,6 +68,10 @@ export default function Inventory() {
             setErrors('Invalid warranty expiration date format. Please enter a valid date (e.g., 31/12/2023).');
             return false;
         }
+        if (isNaN(costOfAppliance) || Number(costOfAppliance) <= 0) {   
+            setErrors('Invalid cost. Please enter a valid number greater than 0 for the cost of the appliance.');
+            return false;
+        }
 
         return true;
     };
@@ -46,6 +79,12 @@ export default function Inventory() {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
+        if (name === 'firstName') setFirstName(value);
+        if (name === 'lastName') setLastName(value);
+        if (name === 'address') setAddress(value);
+        if (name === 'mobile') setMobile(value);
+        if (name === 'email') setEmail(value);
+        if (name === 'costOfAppliance') setCostOfAppliance(value);
         if (name === 'eircode') setEircode(value);
         if (name === 'applianceType') setApplianceType(value);
         if (name === 'brand') setBrand(value);
@@ -60,82 +99,109 @@ export default function Inventory() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const purchase = purchaseDate.split('/').reverse().join('-');
         const warranty = warrantyExpirationDate.split('/').reverse().join('-');
         if (new Date(warranty) < new Date(purchase)) {
             setErrors('Warranty expiration date cannot be earlier than purchase date.');
-            return false;
-        }
-
-        if (!eircode.trim()) {
-            setErrors('Please enter your Eircode.');
             return;
         }
 
-        if (!applianceType) {
-            setErrors('Please select an appliance type.');
-            return;
-        }
+        if (!validateForm()) return;
 
-        if (!brand.trim()) {
-            setErrors('Please enter the brand of the appliance.');
-            return;
-        }
-        
-        if (!modelNumber.trim()) {
-            setErrors('Please enter the model number of the appliance.');
-            return;
-        }
-        if (!serialNumber.trim()) {
-            setErrors('Please enter the serial number of the appliance.');
-            return;
-        }
-        if (!purchaseDate.trim()) {
-            setErrors('Please enter the purchase date of the appliance.');
-            return;
-        }
-        if (!warrantyExpirationDate.trim()) {
-            setErrors('Please enter the warranty expiration date of the appliance.');
-            return;
-        }
-
-        if (validateForm()) {
-            try {
-                const res = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ eircode, applianceType, brand, modelNumber, serialNumber, purchaseDate, warrantyExpirationDate}),
-                });
-                const result = await res.json();
-                if (res.ok) {
-                    setSuccess('Form submitted successfully!');
-                    setErrors('');
-                    setSubmittedData(result.data);
-                } else {
-                    setErrors(result.message || 'Submission failed');
-                    setEircode(result.data?.eircode || eircode);
-                    setApplianceType(result.data?.applianceType || applianceType);
-                    setBrand(result.data?.brand || brand);
-                    setModelNumber(result.data?.modelNumber || modelNumber);
-                    setSerialNumber(result.data?.serialNumber || serialNumber);
-                    setPurchaseDate(result.data?.purchaseDate || purchaseDate);
-                    setWarrantyExpirationDate(result.data?.warrantyExpirationDate || warrantyExpirationDate);
-                }
-            } catch (error) {
-                setErrors('Network error, please try again.');
+        try {
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    firstName, 
+                    lastName, 
+                    address, 
+                    mobile, 
+                    email, 
+                    eircode, 
+                    applianceType, 
+                    brand, 
+                    modelNumber, 
+                    serialNumber, 
+                    purchaseDate, 
+                    warrantyExpirationDate, 
+                    costOfAppliance 
+                }),
+            });
+            const result = await res.json();
+            if (res.ok) {
+                setSuccess('New appliance added successfully.');
+                setErrors('');
+                setSubmittedData(result.data);
+            } else {
+                setErrors(result.message || 'Submission failed');
             }
+        } catch (error) {
+            setErrors('Network error, please try again.');
         }
     };
 
     return (
         <div>
-            <nav className="nav-bar">
-                <Link href="/part-a" className="nav-link">Movie Booking</Link>
-                <Link href="/part-b-c" className="nav-link active">Appliance Inventory</Link>
-            </nav>
             <div className="inventory-form-container">
             <h1>Home Appliance Inventory Form</h1>
             <form onSubmit={handleSubmit}>
+                <label htmlFor="firstName">First Name</label>
+                <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={firstName}
+                    onChange={handleChange}
+                    className="inventory-form-input"
+                    placeholder="Enter first name"
+                    required
+                />
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={lastName}
+                    onChange={handleChange}
+                    className="inventory-form-input"
+                    placeholder="Enter last name"
+                    required               
+                />
+                <label htmlFor="address">Address</label>
+                <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    value={address}
+                    onChange={handleChange}
+                    className="inventory-form-input"
+                    placeholder="Enter address"
+                    required
+                />
+                <label htmlFor="mobile">Mobile Number</label>
+                <input
+                    type="text"
+                    id="mobile"
+                    name="mobile"
+                    value={mobile}
+                    onChange={handleChange}
+                    className="inventory-form-input"
+                    placeholder="Enter mobile number"
+                    required
+                />
+                <label htmlFor="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleChange}
+                    className="inventory-form-input"
+                    placeholder="Enter email address"
+                    required
+                />  
                 <label htmlFor="eircode">Eircode</label>
                 <input
                     type="text"
@@ -224,6 +290,17 @@ export default function Inventory() {
                     placeholder="31/12/2023"
                     required
                 />
+                <label htmlFor="costOfAppliance">Cost of Appliance</label>      
+                <input
+                    type="text"
+                    id="costOfAppliance"
+                    name="costOfAppliance"
+                    value={costOfAppliance}
+                    onChange={handleChange}
+                    className="inventory-form-input"
+                    placeholder="Enter cost of appliance"
+                    required
+                />
                 <button type="submit" className="inventory-form-button">
                     Add to inventory
                 </button>
@@ -233,6 +310,9 @@ export default function Inventory() {
             {submittedData && (
                 <div className="submitted-data">
                     <h2>Submitted Appliance Information</h2>
+                    <p><strong>First Name:</strong> {submittedData.firstName}</p>
+                    <p><strong>Last Name:</strong> {submittedData.lastName}</p>
+                    <p><strong>Email:</strong> {submittedData.email}</p>
                     <p><strong>Eircode:</strong> {submittedData.eircode}</p>
                     <p><strong>Appliance Type:</strong> {submittedData.applianceType}</p>
                     <p><strong>Brand:</strong> {submittedData.brand}</p>
@@ -240,6 +320,7 @@ export default function Inventory() {
                     <p><strong>Serial Number:</strong> {submittedData.serialNumber}</p>
                     <p><strong>Purchase Date:</strong> {submittedData.purchaseDate}</p>
                     <p><strong>Warranty Expiration Date:</strong> {submittedData.warrantyExpirationDate}</p>
+                    <p><strong>Cost of Appliance:</strong> €{submittedData.costOfAppliance}</p>
                 </div>
             )}
         </div>
