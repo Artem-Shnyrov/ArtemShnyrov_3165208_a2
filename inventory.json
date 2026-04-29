@@ -1,0 +1,56 @@
+[
+  {
+    "eircode": "D01 0001",
+    "applianceType": "Oven",
+    "brand": "Goer",
+    "modelNumber": "789-098-0678",
+    "serialNumber": "6785-9876-2341",
+    "purchaseDate": "31/12/2020",
+    "warrantyExpirationDate": "31/12/2023"
+  },
+  {
+    "eircode": "D01 0001",
+    "applianceType": "Oven",
+    "brand": "Goer",
+    "modelNumber": "789-098-0678",
+    "serialNumber": "6785-9876-2341",
+    "purchaseDate": "31/12/2020",
+    "warrantyExpirationDate": "31/12/2023"
+  },
+  {
+    "eircode": "D01 0001",
+    "applianceType": "Oven",
+    "brand": "Goer",
+    "modelNumber": "789-098-0678",
+    "serialNumber": "6785-9876-2341",
+    "purchaseDate": "31/12/2020",
+    "warrantyExpirationDate": "31/12/2024"
+  },
+  {
+    "eircode": "D01 0001",
+    "applianceType": "Oven",
+    "brand": "Goer",
+    "modelNumber": "789-098-0678",
+    "serialNumber": "6785-9876-2341",
+    "purchaseDate": "31/12/2020",
+    "warrantyExpirationDate": "31/12/2024"
+  },
+  {
+    "eircode": "D01 0123",
+    "applianceType": "Refrigerator",
+    "brand": "re",
+    "modelNumber": "123-123-1233",
+    "serialNumber": "1234-1234-1234",
+    "purchaseDate": "31/12/2020",
+    "warrantyExpirationDate": "31/12/2024"
+  },
+  {
+    "eircode": "D02 4653",
+    "applianceType": "Refrigerator",
+    "brand": "Beko",
+    "modelNumber": "123-456-3456",
+    "serialNumber": "1234-1234-1234",
+    "purchaseDate": "31/12/2020",
+    "warrantyExpirationDate": "31/12/2023"
+  }
+]
