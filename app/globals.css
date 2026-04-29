@@ -312,3 +312,65 @@ label {
   color: #721c24;
   font-weight: 500;
 }
+
+/* Update page styles */
+.update-container {
+  max-width: 700px;
+  margin: 36px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.update-container h1 {
+  margin: 0;
+  color: #212529;
+}
+
+.update-search-row {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.update-search-row .inventory-form-input {
+  flex: 1;
+}
+
+.error {
+  max-width: 700px;
+  margin: 14px auto;
+  padding: 10px 14px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  border-radius: 6px;
+}
+
+.success {
+  max-width: 700px;
+  margin: 14px auto;
+  padding: 10px 14px;
+  background: #e6f4ea;
+  border: 1px solid #c7eed2;
+  color: #1b7a3a;
+  border-radius: 6px;
+}
+
+/* Make the update form fields a bit tighter */
+.inventory-form-container h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .update-search-row {
+    flex-direction: column;
+  }
+  .update-search-row .inventory-form-input {
+    width: 100%;
+  }
+}
