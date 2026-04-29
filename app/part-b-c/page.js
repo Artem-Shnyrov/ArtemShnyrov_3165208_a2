@@ -144,6 +144,9 @@ export default function Inventory() {
 
     return (
         <div>
+            <nav className="nav-bar">
+                <Link href="/" className="nav-link home-link">Home</Link>
+            </nav>
             <div className="inventory-form-container">
             <h1>Home Appliance Inventory Form</h1>
             <form onSubmit={handleSubmit}>
