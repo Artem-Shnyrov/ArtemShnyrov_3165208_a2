@@ -31,6 +31,14 @@ export default function Search(){
         }
     }
 
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
     return(
         <div>
             <nav className='nav-bar'>
@@ -61,8 +69,8 @@ export default function Search(){
                     <p><strong>Brand:</strong> {result.Brand}</p>
                     <p><strong>Model Number:</strong> {result.ModelNumber}</p>
                     <p><strong>Serial Number:</strong> {result.SerialNumber}</p>
-                    <p><strong>Purchase Date:</strong> {result.PurchaseDate}</p>
-                    <p><strong>Warranty Expiration Date:</strong> {result.WarrantyExpirationDate}</p>
+                    <p><strong>Purchase Date:</strong> {formatDate(result.PurchaseDate)}</p>
+                    <p><strong>Warranty Expiration Date:</strong> {formatDate(result.WarrantyExpirationDate)}</p>
                     <p><strong>Cost:</strong> €{result.CostOfAppliance}</p>
                 </div>
             )}

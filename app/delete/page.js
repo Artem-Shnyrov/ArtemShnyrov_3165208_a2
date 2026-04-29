@@ -39,7 +39,11 @@ export default function Delete(){
     const handleDelete = async () => {
         setSuccess('');
 
-        const res = await fetch(`/api/delete?serialNumber=${serialNumber}`);
+        const res = await fetch(`/api/delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ serialNumber: applianceData.SerialNumber }),
+        });
         const data = await res.json();
 
         if(res.ok){
@@ -49,6 +53,14 @@ export default function Delete(){
             setError(data.message);
         }
     }
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
     return (
         <div>
@@ -79,8 +91,8 @@ export default function Delete(){
                     <p>Brand: {applianceData.Brand}</p>
                     <p>Model Number: {applianceData.ModelNumber}</p>
                     <p>Serial Number: {applianceData.SerialNumber}</p>
-                    <p>Purchase Date:= {applianceData.PurchaseDate}</p>
-                    <p>Warranty Expiration Date:= {applianceData.WarrantyExpirationDate}</p>
+                    <p>Purchase Date: {formatDate(applianceData.PurchaseDate)}</p>
+                    <p>Warranty Expiration Date: {formatDate(applianceData.WarrantyExpirationDate)}</p>
                     <p>Cost: €{applianceData.CostOfAppliance}</p>
                     <p>Are you sure you want to delete this appliance?</p>
                     <button onClick={handleDelete} className="inventory-form-button">Confirm Delete</button>

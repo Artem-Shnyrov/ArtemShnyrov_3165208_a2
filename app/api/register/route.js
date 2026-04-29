@@ -1,4 +1,4 @@
-import db from "../../lib/db";
+import db from "@/lib/db";
 
 export async function POST(req) {
   try {
@@ -80,8 +80,7 @@ export async function POST(req) {
 
     //Check if appliance already exists
     const [existing] = await db.query(
-      "SELECT id FROM appliances WHERE serial_number = ?",
-      [cleanSerial]
+      "SELECT ApplianceID FROM Appliance WHERE SerialNumber = ?", [cleanSerial]
     );
 
     if (existing.length > 0) {
@@ -116,10 +115,18 @@ export async function POST(req) {
       userID = userResult.insertId;
     }
 
+    const formatDate = (date) => {
+      const [day, month, year] = date.split('/');
+      return `${year}-${month}-${day}`;
+    };
+
+    const formattedPurchaseDate = formatDate(purchaseDate);
+    const formattedWarrantyDate = formatDate(warrantyExpirationDate);
+
     //Insert Appliance
     await db.query(
       'INSERT INTO Appliance (UserID, ApplianceType, Brand, ModelNumber, SerialNumber, PurchaseDate, WarrantyExpirationDate, CostOfAppliance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [userID, cleanType, cleanBrand, cleanModel, cleanSerial, purchaseDate, warrantyExpirationDate, costOfAppliance]
+      [userID, cleanType, cleanBrand, cleanModel, cleanSerial, formattedPurchaseDate, formattedWarrantyDate, costOfAppliance]
     );
 
     return new Response(JSON.stringify({

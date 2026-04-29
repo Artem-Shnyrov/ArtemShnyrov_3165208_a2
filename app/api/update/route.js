@@ -42,9 +42,17 @@ export async function PUT(req){
         const cleanBrand = sanitize(brand.trim());
         const cleanModel = sanitize(modelNumber.trim());
 
+         const formatDate = (date) => {
+            const [day, month, year] = date.split('/');
+            return `${year}-${month}-${day}`;
+        };
+
+        const formattedPurchaseDate = formatDate(purchaseDate);
+        const formattedWarrantyDate = formatDate(warrantyExpirationDate);
+
         const [result] = await db.query(
             'UPDATE Appliance SET ApplianceType = ?, Brand = ?, ModelNumber = ?, PurchaseDate = ?, WarrantyExpirationDate = ?, CostOfAppliance = ? WHERE SerialNumber = ?',
-            [cleanType, cleanBrand, cleanModel.trim(), purchaseDate, warrantyExpirationDate, costOfAppliance, serialNumber.trim()]
+            [cleanType, cleanBrand, cleanModel.trim(), formattedPurchaseDate, formattedWarrantyDate, costOfAppliance, serialNumber.trim()]
         )
 
         return new Response(
@@ -58,6 +66,7 @@ export async function PUT(req){
             }
         )
     } catch (error) {
+        console.error(error);
         return new Response(
             JSON.stringify({
                 success: false,

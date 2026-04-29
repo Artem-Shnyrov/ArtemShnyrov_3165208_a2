@@ -1,9 +1,9 @@
 import db from '@/lib/db'
 
-export async function DELETE(req){
+export async function POST(req){
     try {
-        const {searchParams} = new URL(req.url);
-        const serialNumber = searchParams.get('serialNumber');
+        const data = await req.json();
+        const serialNumber = data.serialNumber;
         if(!serialNumber){
             return new Response(
                 JSON.stringify({

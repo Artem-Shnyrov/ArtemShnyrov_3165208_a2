@@ -40,8 +40,8 @@ export default function Update(){
             setBrand(data.data.Brand);
             setCostOfAppliance(data.data.CostOfAppliance);
             setModelNumber(data.data.ModelNumber);
-            setPurchaseDate(data.data.PurchaseDate);
-            setWarrantyExpirationDate(data.data.WarrantyExpirationDate);
+            setPurchaseDate(formatDate(data.data.PurchaseDate));
+            setWarrantyExpirationDate(formatDate(data.data.WarrantyExpirationDate));
             setFound(true);
         } else{
             setError(data.message);
@@ -100,6 +100,14 @@ export default function Update(){
             setError(data.message);
         }
     }
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
     return (
     <div>
